@@ -6,7 +6,7 @@
 
 Build, govern, monitor, and scale enterprise AI systems with a modern software development kit designed for production environments.
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Available-success?style=for-the-badge)](https://phaelitus-sdk-806168011637.us-west1.run.app)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Available-success?style=for-the-badge)](https://phaelitus-sdk-806168011637.us-west1.run.app/)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Enterprise](https://img.shields.io/badge/Enterprise-Ready-success?style=for-the-badge)
