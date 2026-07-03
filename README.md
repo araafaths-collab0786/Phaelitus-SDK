@@ -12,9 +12,13 @@ Build, govern, monitor, and scale enterprise AI systems with a modern software d
 ![Enterprise](https://img.shields.io/badge/Enterprise-Ready-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-### 🌐 Live Demo
+### 🌐 Live Demo Link
 
 ### https://phaelitus-sdk-806168011637.us-west1.run.app/
+
+### 🌐 Alternative Live Demo Link
+
+### https://phaelitus-sdk.vercel.app/
 
 </div>
 
