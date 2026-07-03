@@ -1,0 +1,18 @@
+# Pre-commit configuration for NeuralOps pipeline validators
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+        name: Validate YAML structure
+        description: Ensures all modelpipeline.yaml specs are valid syntactical YAML documents.
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/neuralops/neuralops-crd-validator
+    rev: v1.5.0
+    hooks:
+      - id: validate-modelpipeline-schema
+        name: Validate ModelPipeline specs against K8s CRD schemas
+        files: ^.*modelpipeline\.yaml$
+        description: Executes client-side validation of statistical drift parameters against standard CRD definitions.

@@ -1,0 +1,40 @@
+apiVersion: governance.neuralops.io/v1alpha1
+kind: ModelPipeline
+metadata:
+  name: credit-scoring-pipeline
+  namespace: prod-models
+spec:
+  # Association with Cloud storage/BigQuery baseline dataset
+  baseline:
+    dataset: gcp-prod-ml.neuralops_features
+    referenceTable: baseline_demographics_v1
+    syncInterval: 12h
+  
+  # Target live endpoint configuration
+  inferenceTarget:
+    modelType: LLM
+    serviceName: credit-scoring-model
+    port: 80
+  
+  # Core Drift thresholds and statistical testing
+  driftEngine:
+    statisticalTest: PopulationStabilityIndex
+    alertThreshold: 0.20
+    testWindow: 24h
+    continuousMonitor: true
+  
+  # Automated Mitigation & zero-downtime routing parameters
+  mitigationPolicy:
+    autoMitigate: true
+    remediationWorkflow: ArgoWorkflowDeployCanary
+    safetyLatencies:
+      canaryP99LimitMs: 50
+      cooldownPeriodSeconds: 300
+    trafficSplits:
+      primaryWeight: 90
+      candidateWeight: 10
+  
+  # Operational notification targets
+  notifications:
+    slackWebhookRef: k8s-secret-slack-alerts
+    pagerdutyKeyRef: k8s-secret-pagerduty-ops

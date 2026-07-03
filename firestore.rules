@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isLoggedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.matches('^[a-zA-Z0-9_\\-]+$') && id.size() <= 128;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.keys().size() <= 8
+        && data.uid == request.auth.uid
+        && data.email is string
+        && (!('displayName' in data) || data.displayName is string)
+        && (!('photoURL' in data) || data.photoURL is string)
+        && (!('role' in data) || data.role is string)
+        && (!('tenant' in data) || data.tenant is string)
+        && (!('createdAt' in data) || data.createdAt is string);
+    }
+
+    function isValidIncident(data) {
+      return data.keys().hasAll(['id', 'severity', 'statusText', 'timestamp', 'title', 'model', 'metric', 'score', 'logs'])
+        && data.keys().size() <= 13
+        && data.id is string
+        && data.severity is string
+        && data.severity in ['resolved', 'warning', 'critical']
+        && data.statusText is string
+        && data.timestamp is string
+        && data.title is string
+        && (!('subtext' in data) || data.subtext is string)
+        && (!('description' in data) || data.description is string)
+        && data.model is string
+        && data.metric is string
+        && data.score is number
+        && (!('feature' in data) || data.feature is string)
+        && data.logs is string
+        && (!('createdAt' in data) || data.createdAt is string);
+    }
+
+    function isValidPolicyConfig(data) {
+      return data.keys().hasAll(['psiThreshold', 'canaryLatency', 'autoMitigate'])
+        && data.keys().size() <= 4
+        && data.psiThreshold is number
+        && data.canaryLatency is number
+        && data.autoMitigate is bool
+        && (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // Rules for paths
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+
+      match /incidents/{incidentId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(incidentId) && isValidIncident(request.resource.data);
+        allow update: if isOwner(userId) && isValidId(incidentId) && isValidIncident(request.resource.data);
+        allow delete: if isOwner(userId) && isValidId(incidentId);
+      }
+
+      match /config/{configId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(configId) && (configId == 'policies' ? isValidPolicyConfig(request.resource.data) : false);
+        allow update: if isOwner(userId) && isValidId(configId) && (configId == 'policies' ? isValidPolicyConfig(request.resource.data) : false);
+        allow delete: if isOwner(userId) && isValidId(configId);
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Phaelitus SDK",
+  "description": "Autonomous, reactive MLOps continuous evaluation engine and tactical event stream. Features statistical drift monitoring, automated retraining pipelines, and LLM-powered root cause analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

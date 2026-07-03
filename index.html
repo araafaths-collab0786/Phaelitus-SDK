@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      // Suppress benign sandbox HMR WebSocket connection errors
+      (function() {
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        const isWebsocketError = (args) => {
+          return args.some(arg => {
+            if (!arg) return false;
+            const str = String(arg.message || arg.stack || arg);
+            return (
+              str.includes("WebSocket") ||
+              str.includes("websocket") ||
+              str.includes("HMR") ||
+              (str.includes("vite") && str.includes("connect"))
+            );
+          });
+        };
+
+        console.error = function(...args) {
+          if (isWebsocketError(args)) return;
+          originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+          if (isWebsocketError(args)) return;
+          originalWarn.apply(console, args);
+        };
+
+        window.addEventListener("unhandledrejection", (event) => {
+          const reason = event.reason;
+          if (reason) {
+            const msg = reason.message || String(reason);
+            const stack = reason.stack || "";
+            if (
+              msg.includes("WebSocket") ||
+              msg.includes("websocket") ||
+              msg.includes("HMR") ||
+              stack.includes("websocket") ||
+              stack.includes("WebSocket")
+            ) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }
+        }, true);
+
+        window.addEventListener("error", (event) => {
+          const msg = event.message || "";
+          if (
+            msg.includes("WebSocket") ||
+            msg.includes("websocket") ||
+            msg.includes("HMR")
+          ) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }, true);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

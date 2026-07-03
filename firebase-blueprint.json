@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The Firebase Auth user ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "photoURL": { "type": "string", "description": "User profile photo URL" },
+        "role": { "type": "string", "description": "User organization role" },
+        "tenant": { "type": "string", "description": "User organization tenant" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of user sign up" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Incident": {
+      "title": "Incident",
+      "description": "An MLOps telemetry or drift incident",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique incident ID" },
+        "severity": { "type": "string", "enum": ["resolved", "warning", "critical"], "description": "Incident severity status" },
+        "statusText": { "type": "string", "description": "Short protocol status string" },
+        "timestamp": { "type": "string", "description": "Formatted local timestamp of the incident" },
+        "title": { "type": "string", "description": "Main title of the incident" },
+        "subtext": { "type": "string", "description": "Sub-heading or feature tag" },
+        "description": { "type": "string", "description": "Detailed description of the incident" },
+        "model": { "type": "string", "description": "Model identifier" },
+        "metric": { "type": "string", "description": "ML metric evaluated" },
+        "score": { "type": "number", "description": "Numerical score or metric value" },
+        "feature": { "type": "string", "description": "Specific feature affected" },
+        "logs": { "type": "string", "description": "Raw system telemetry logs" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of creation in Firestore" }
+      },
+      "required": ["id", "severity", "statusText", "timestamp", "title", "model", "metric", "score", "logs"]
+    },
+    "PolicyConfig": {
+      "title": "PolicyConfig",
+      "description": "User configuration for MLOps drift reconciliation policies",
+      "type": "object",
+      "properties": {
+        "psiThreshold": { "type": "number", "description": "PSI threshold limit" },
+        "canaryLatency": { "type": "number", "description": "Canary P99 Gating Latency in milliseconds" },
+        "autoMitigate": { "type": "boolean", "description": "Whether automated remediation loop is active" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Timestamp of last policy modification" }
+      },
+      "required": ["psiThreshold", "canaryLatency", "autoMitigate"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profile metadata"
+    },
+    "users/{userId}/incidents/{incidentId}": {
+      "schema": "Incident",
+      "description": "User's customized or simulated incidents feed"
+    },
+    "users/{userId}/config/policies": {
+      "schema": "PolicyConfig",
+      "description": "User's custom drift alert and remediation policies"
+    }
+  }
+}
