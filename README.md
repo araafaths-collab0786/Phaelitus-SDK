@@ -10,7 +10,7 @@ Build, govern, monitor, and scale enterprise AI systems with a modern software d
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Enterprise](https://img.shields.io/badge/Enterprise-Ready-success?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ### 🌐 Live Demo
 
